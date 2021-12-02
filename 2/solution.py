@@ -4,28 +4,34 @@ def read_file(file):
 
 
 def format_course(ls):
-    new_ls = []
-    for ln in ls:
-        new_ls.append(ln.replace('\n', '').rsplit(' ', ))
-    return new_ls
+    formatted_course = []
+    for item in ls:
+        formatted_course.append(item.replace('\n', '').rsplit(' ', ))
+    return formatted_course
 
 
-def calc_position(c):
-    x = 0
-    y = 0
-    for path in c:
-        direction, value = path
+def calc_position(ls):
+    horizontal_position = 0
+    depth = 0
+    aim = 0
+    for item in ls:
+        direction, value = item
         match direction:
             case 'forward':
-                x += int(value)
+                horizontal_position += int(value)
+                depth += int(value) * aim
             case 'up':
-                y -= int(value)
+                aim -= int(value)
             case 'down':
-                y += int(value)
-    return [x, y]
+                aim += int(value)
+    return [horizontal_position, depth]
 
 
 if __name__ == '__main__':
-    course = read_file('./puzzle_input.txt')
-    formatted_course = format_course(course)
-    print(calc_position(formatted_course))
+    from support import pipe
+    result = pipe(
+        read_file,
+        format_course,
+        calc_position,
+    )('./puzzle_input.txt')
+    print(result)
